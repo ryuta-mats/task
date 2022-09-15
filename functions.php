@@ -69,7 +69,7 @@ function insert_task($title)
 }
 
 // タスク完了
-function update_done_by_id($id)
+function update_done_by_id($id,$status)
 {
     // データベースに接続
     $dbh = connect_db();
@@ -79,7 +79,7 @@ function update_done_by_id($id)
     UPDATE
         tasks
     SET
-        done = 1
+        done = :status
     WHERE
         id = :id
     EOM;
@@ -89,6 +89,7 @@ function update_done_by_id($id)
 
     // パラメータのバインド
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':status', $status, PDO::PARAM_INT);
 
     // プリペアドステートメントの実行
     $stmt->execute();
