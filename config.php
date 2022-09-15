@@ -11,4 +11,4 @@ define('MSG_TITLE_REQUIRED', 'タスク名を入力してください');
 
 // doneの状態を定数として定義
 define('TASK_NOTYET',0);
-define('TASK_DONE',0);
+define('TASK_DONE',1);
