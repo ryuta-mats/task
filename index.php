@@ -2,6 +2,27 @@
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/config.php';
 
+/* タスク登録
+---------------------------------------------*/
+// 初期化
+$title = '';
+$errors = [];
+
+// リクエストメソッドの判定
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // フォームに入力されたデータを受け取る
+    $title = filter_input(INPUT_POST, 'title');
+
+    //バリデーションしてエラーメッセージを受け取る
+    $errors = insert_validate($title);
+
+    //エラーチェック
+    if (empty($errors)) {
+        // 後ほど ここに insert_task関数を呼び出す処理を追記する
+        insert_task($title);
+    }
+}
+
 $notyet_tasks =  find_task_by_done(TASK_NOTYET);
 $done_tasks =  find_task_by_done(TASK_DONE);
 ?>
@@ -11,7 +32,7 @@ $done_tasks =  find_task_by_done(TASK_DONE);
 <?php include_once __DIR__ . '/_head.html' ?>
 
 <body>
-    <pre><?php var_dump($notyet_tasks) ?></pre>
+    <!--    <pre><?php var_dump($notyet_tasks) ?></pre> -->
     <div class="wrapper">
         <header class="header-task">
             <h1><a href="index.php">My Tasks</a></h1>
@@ -21,9 +42,8 @@ $done_tasks =  find_task_by_done(TASK_DONE);
             <input type="checkbox" value="" id="form-box">
             <div class="new-task task-form-group">
                 <!-- エラーが発生した場合、エラーメッセージを出力 -->
-                <ul class="errors">
-                    <li>タスク名を入力してください</li>
-                </ul>
+                <?php include_once __DIR__ . '/_errors.php' ?>
+
                 <form action="" method="post">
                     <input type="text" name="title" placeholder="タスクを入力してください">
                     <button type="submit" class="big-btn add-btn">
